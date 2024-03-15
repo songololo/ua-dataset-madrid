@@ -1,0 +1,25 @@
+[project]
+name = "paper-centrality-normalisation"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "", email = ""},
+]
+dependencies = [
+    "ipykernel>=6.28.0",
+    "geopandas>=0.14.2",
+    "pandas>=2.1.4",
+    "seaborn>=0.13.2",
+    "jupyterlab>=4.0.10",
+    "matplotlib>=3.8.3",
+    "jupyter>=1.0.0",
+    "cityseer>=4.11.1",
+    "scipy>=1.12.0",
+    "networkx>=3.2.1",
+]
+requires-python = ">=3.11,<3.13"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm]
+distribution = false

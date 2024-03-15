@@ -1,3 +1,9 @@
+# sundry
+*.DS_Store
+temp
+*.gpkg-shm
+*.gpkg-wal
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
