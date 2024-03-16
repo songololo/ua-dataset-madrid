@@ -4,17 +4,23 @@
 from __future__ import annotations
 
 import geopandas as gpd
+import numpy as np
 import schema
 from cityseer.metrics import layers, networks
 from cityseer.tools import graphs, io, util
+from rasterio import MemoryFile
+from rasterstats import point_query
 from shapely import geometry
+from tqdm import tqdm
 
 # update the paths to correspond to your file locations
 path_streets = "../data/street_network.gpkg"
 path_neighbourhoods = "../data/neighbourhoods.gpkg"
 path_out_dataset = "../temp/dataset.gpkg"
+path_out_dataset_subset = "../temp/dataset_subset.gpkg"
 path_premises = "../data/premises_activities.gpkg"
 path_out_premises = "../temp/premises_clean.gpkg"
+path_population = "../data/population_clipped.tif"
 
 # %%
 # open streets
@@ -36,7 +42,9 @@ G_nx_dual = graphs.nx_to_dual(G_nx)
 
 # %%
 # computations only run for live nodes
-for nd_key, nd_data in G_nx_dual.nodes(data=True):
+for nd_key, nd_data in tqdm(
+    G_nx_dual.nodes(data=True), total=G_nx_dual.number_of_nodes()
+):
     point = geometry.Point(nd_data["x"], nd_data["y"])
     # set live nodes for nodes within boundary
     if not bounds_union_geom.contains(point):
@@ -59,6 +67,27 @@ nodes_gdf, edges_gdf, network_structure = io.network_structure_from_nx(
     G_nx_dual, crs=edges_gdf.crs
 )
 
+# %%
+# population data
+# do before dropping point geom
+with open(path_population, "rb") as f:
+    memfile = MemoryFile(f.read())
+    with memfile.open() as dataset:
+        pop_raster = dataset.read()
+        for node_idx, node_row in tqdm(nodes_gdf.iterrows(), total=len(nodes_gdf)):
+            pop_val = point_query(
+                node_row["geom"],
+                pop_raster,
+                interpolate="nearest",
+                nodata=-200,
+                affine=dataset.transform,
+            )[0]
+            if pop_val is None:
+                pop_val = 0
+            nodes_gdf.at[node_idx, "pop_dens"] = np.clip(pop_val, 0, np.inf)
+# convert from 100m2 to 1km2
+nodes_gdf["pop_dens"] = nodes_gdf["pop_dens"] * 100
+
 
 # %%
 # splice primal geom onto dual nodes for vis
@@ -78,7 +107,7 @@ def copy_primal_bearings(row):
 nodes_gdf["bearing"] = nodes_gdf.apply(copy_primal_bearings, axis=1)
 # copy neighbourhood identifiers to nodes
 joined_gdf = gpd.sjoin(nodes_gdf, bounds, how="left", predicate="intersects")
-nodes_gdf["distr"] = joined_gdf["NOMDIS"]
+nodes_gdf["district"] = joined_gdf["NOMDIS"]
 nodes_gdf["neighb"] = joined_gdf["NOMBRE"]
 # switch to line geoms
 nodes_gdf.set_geometry("line_geometry", inplace=True)
@@ -185,4 +214,97 @@ nodes_gdf, premises_eng = layers.compute_accessibilities(
 # %%
 # save only live nodes
 nodes_gdf_live = nodes_gdf[nodes_gdf.live]
+# filter out non located per districts
+nodes_gdf_live = nodes_gdf[~nodes_gdf.district.isna()]
+# simplify geom if necessary
+nodes_gdf_live.geometry = nodes_gdf_live.geometry.simplify(2)
+# pare back data types to reduce size
+for col in nodes_gdf_live.select_dtypes(include=["int64"]).columns:
+    nodes_gdf_live[col] = nodes_gdf_live[col].astype("int32")
+for col in nodes_gdf_live.select_dtypes(include=["float64"]).columns:
+    nodes_gdf_live[col] = nodes_gdf_live[col].astype("float32")
+# save
 nodes_gdf_live.to_file(path_out_dataset)
+
+# %%
+# save subset
+nodes_gdf_subset = nodes_gdf_live[
+    nodes_gdf_live.district.isin(
+        [
+            "Centro",
+            "Arganzuela",
+            "Retiro",
+            "Salamanca",
+            "Chamartín",
+            "Tetuán",
+            "Chamberí",
+            "Moncloa - Aravaca",
+            "Latina",
+            "Carabanchel",
+            "Usera",
+        ]
+    )
+]
+nodes_gdf_subset.to_file(path_out_dataset_subset)
+
+# %%
+alt = [
+    "Palacio",
+    "Embajadores",
+    "Cortes",
+    "Justicia",
+    "Universidad",
+    "Sol",
+    "Imperial",
+    "Acacias",
+    "Chopera",
+    "Legazpi",
+    "Delicias",
+    "Palos de la Frontera",
+    "Atocha",
+    "Pacífico",
+    "Adelfas",
+    "Estrella",
+    "Ibiza",
+    "Los Jerónimos",
+    "Niño Jesús",
+    "Recoletos",
+    "Goya",
+    "Fuente del Berro",
+    "Guindalera",
+    "Lista",
+    "Castellana",
+    "El Viso",
+    "Prosperidad",
+    "Ciudad Jardín",
+    "Hispanoamérica",
+    "Nueva España",
+    "Bellas Vistas",
+    "Cuatro Caminos",
+    "Castillejos",
+    "Berruguete",
+    "Gaztambide",
+    "Arapiles",
+    "Trafalgar",
+    "Almagro",
+    "Ríos Rosas",
+    "Vallehermoso",
+    "Casa de Campo",
+    "Argüelles",
+    "Ciudad Universitaria",
+    "Valdezarza",
+    "Los Cármenes",
+    "Puerta del Ángel",
+    "Lucero",
+    "Aluche",
+    "Comillas",
+    "Opañel",
+    "San Isidro",
+    "Vista Alegre",
+    "Puerta Bonita",
+    "Abrantes",
+    "Almendrales",
+    "Moscardó",
+    "Zofío",
+    "Pradolongo",
+]
