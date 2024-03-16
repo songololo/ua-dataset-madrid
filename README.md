@@ -2,6 +2,22 @@
 
 Reproducible code for paper on centralities and normalisation
 
+## Installation
+
+Clone this repository to a local working folder.
+
+The PDM package manager is recommended and can be installed on mac per `brew install pdm`.
+
+Packages can then be installed into a virtual environment per `pdm install`.
+
+If using an IDE the `.venv` should be detected.
+
+Create a `temp` folder inside the repository's root folder. This folder is ignored by `.gitignore` but is necessary for the script to output files from the processing steps.
+
+The code is in `process/comopute.py` file and can be run using code cells demarcated by the `# %%` lines (assuming an IDE such as vscode).
+
+The file can otherwise be run directly, though the file paths to the `data` folder may need to be adjusted (e.g. changing `../` to `./`).
+
 ## Data Sources
 
 ### Madrid Data
@@ -16,9 +32,9 @@ The data sources are pre-processed as described below and saved to the `data` su
   - Cite: _Origin of the data: Madrid City Council (or, where appropriate, administrative body, body or entity in question)_
   - Description: _Microdata file of the census of premises and activities of the Madrid City Council, classified according to their type of access (street door or grouped), situation (open, closed...) and indication of the economic activity exercised and the hospitality and restaurant terraces that appear registered in said census._
 - Premises pre-processing:
-  - Import CSV and export as GPKG
+  - Import CSV (EPSG:25830) and export as GPKG (EPSG:2062)
   - Remove locations without eastings and northings
-  - Delete attribute columns where not describing census units or landuse identifiers
+  - Delete attribute columns where not describing census units or landuse identifiers. (See `compute.py` column renaming for retained columns.)
   - Save as GPKG
   - Vacuum
 
@@ -29,7 +45,7 @@ The data sources are pre-processed as described below and saved to the `data` su
   - [License](https://datos.madrid.es/egob/catalogo/aviso-legal)
   - Cite: _Origin of the data: Madrid City Council (or, where appropriate, administrative body, body or entity in question)_
   - Description: _Delimitation of the 131 neighborhoods of the municipality of Madrid. The names and codes of each neighborhood and the districts to which they belong are indicated. The initial delimitation corresponds to the territorial restructuring of 1987._
-- Save to GPKG
+- Save to GPKG in EPSG:2062
 - Create buffered boundary
   - Buffer by 20km and dissolve
   - Delete attribute columns
