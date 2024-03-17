@@ -181,7 +181,7 @@ premises_eng = premises_eng[
 premises_eng.to_file(path_out_premises)
 
 # %%
-lu_distances = [500, 1000, 2000]
+lu_distances = [200, 500, 1000, 2000]
 # compute mixed uses
 nodes_gdf, premises_eng = layers.compute_mixed_uses(
     premises_eng,
@@ -238,73 +238,7 @@ nodes_gdf_subset = nodes_gdf_live[
             "Chamartín",
             "Tetuán",
             "Chamberí",
-            "Moncloa - Aravaca",
-            "Latina",
-            "Carabanchel",
-            "Usera",
         ]
     )
 ]
 nodes_gdf_subset.to_file(path_out_dataset_subset)
-
-# %%
-alt = [
-    "Palacio",
-    "Embajadores",
-    "Cortes",
-    "Justicia",
-    "Universidad",
-    "Sol",
-    "Imperial",
-    "Acacias",
-    "Chopera",
-    "Legazpi",
-    "Delicias",
-    "Palos de la Frontera",
-    "Atocha",
-    "Pacífico",
-    "Adelfas",
-    "Estrella",
-    "Ibiza",
-    "Los Jerónimos",
-    "Niño Jesús",
-    "Recoletos",
-    "Goya",
-    "Fuente del Berro",
-    "Guindalera",
-    "Lista",
-    "Castellana",
-    "El Viso",
-    "Prosperidad",
-    "Ciudad Jardín",
-    "Hispanoamérica",
-    "Nueva España",
-    "Bellas Vistas",
-    "Cuatro Caminos",
-    "Castillejos",
-    "Berruguete",
-    "Gaztambide",
-    "Arapiles",
-    "Trafalgar",
-    "Almagro",
-    "Ríos Rosas",
-    "Vallehermoso",
-    "Casa de Campo",
-    "Argüelles",
-    "Ciudad Universitaria",
-    "Valdezarza",
-    "Los Cármenes",
-    "Puerta del Ángel",
-    "Lucero",
-    "Aluche",
-    "Comillas",
-    "Opañel",
-    "San Isidro",
-    "Vista Alegre",
-    "Puerta Bonita",
-    "Abrantes",
-    "Almendrales",
-    "Moscardó",
-    "Zofío",
-    "Pradolongo",
-]
