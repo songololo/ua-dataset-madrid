@@ -38,7 +38,7 @@ The data sources are pre-processed as described below and saved to the `data` su
   - Save as GPKG
   - Vacuum
 
-### Madrid Neighbourhoods
+#### Madrid Neighbourhoods
 
 - Source:
   - [Download](https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=760e5eb0d73a7710VgnVCM2000001f4a900aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default)
@@ -75,4 +75,4 @@ The data sources are pre-processed as described below and saved to the `data` su
   - Citation: Schiavina M., Freire S., Carioli A., MacManus K. (2023): GHS-POP R2023A - GHS population grid multitemporal (1975-2030).European Commission, Joint Research Centre (JRC).
   - Description: _The spatial raster dataset depicts the distribution of residential population, expressed as the number of people per cell._
 - Pre-processing:
-  - gdalwarp -cutline buffered_bounds.gpkg -crop_to_cutline -of GTiff -co "COMPRESS=LZW" -dstnodata -200 -t_srs EPSG:25830 population.tif population_clipped.tif
+  - `gdalwarp -cutline buffered_bounds.gpkg -crop_to_cutline -of GTiff -co "COMPRESS=LZW" -dstnodata -200 -t_srs EPSG:25830 population.tif population_clipped.tif`
