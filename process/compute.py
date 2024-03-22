@@ -13,7 +13,7 @@ from rasterstats import point_query
 from shapely import geometry
 from tqdm import tqdm
 
-# update the paths to correspond to your file locations
+# update the paths to correspond to your file locations if different to below
 path_streets = "../data/street_network.gpkg"
 path_neighbourhoods = "../data/neighbourhoods.gpkg"
 path_out_dataset = "../temp/dataset.gpkg"
@@ -198,7 +198,7 @@ nodes_gdf, premises_eng = layers.compute_accessibilities(
     landuse_column_label="division_desc",
     accessibility_keys=[
         "food_bev",
-        "creative_entert",
+        "creat_entert",
         "retail",
         "services",
         "education",

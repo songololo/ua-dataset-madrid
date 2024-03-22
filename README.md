@@ -10,7 +10,7 @@ The PDM package manager is recommended and can be installed on mac per `brew ins
 
 Packages can then be installed into a virtual environment per `pdm install`.
 
-If using an IDE the `.venv` should be detected.
+If using an IDE the `.venv` should be detected automatically by IDEs such as vscode.
 
 Create a `temp` folder inside the repository's root folder. This folder is ignored by `.gitignore` but is necessary for the script to output files from the processing steps.
 
@@ -22,7 +22,7 @@ The file can otherwise be run directly, though the file paths to the `data` fold
 
 ### Madrid Data
 
-The data sources are pre-processed as described below and saved to the `data` sub-folder in this repository.
+The data sources are pre-processed as described below and saved to the `data` sub-folder in this repository so that the datasets and results can be reproduced in downstream research.
 
 #### Premises Data
 
