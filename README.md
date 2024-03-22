@@ -1,6 +1,6 @@
-# paper-centrality-normalisation
+# Madrid Dataset
 
-Reproducible code for paper on centralities and normalisation
+Madrid Dataset and downstream urban analytics dataset based on Madrid open data.
 
 ## Installation
 
