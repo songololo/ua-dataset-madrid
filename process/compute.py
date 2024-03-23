@@ -192,7 +192,18 @@ nodes_gdf, premises_eng = layers.compute_mixed_uses(
     compute_hill=False,
     compute_hill_weighted=True,
 )
-# compute accessibility to
+# compute mixed uses using simplest paths
+nodes_gdf, premises_eng = layers.compute_mixed_uses(
+    premises_eng,
+    landuse_column_label="division_desc",
+    nodes_gdf=nodes_gdf,
+    network_structure=network_structure,
+    distances=lu_distances,
+    compute_hill=False,
+    compute_hill_weighted=True,
+    angular=True,
+)
+# compute accessibility
 nodes_gdf, premises_eng = layers.compute_accessibilities(
     premises_eng,
     landuse_column_label="division_desc",
@@ -209,6 +220,25 @@ nodes_gdf, premises_eng = layers.compute_accessibilities(
     nodes_gdf=nodes_gdf,
     network_structure=network_structure,
     distances=lu_distances,
+)
+# compute accessibility using simplest paths
+nodes_gdf, premises_eng = layers.compute_accessibilities(
+    premises_eng,
+    landuse_column_label="division_desc",
+    accessibility_keys=[
+        "food_bev",
+        "creat_entert",
+        "retail",
+        "services",
+        "education",
+        "accommod",
+        "sports_rec",
+        "health",
+    ],
+    nodes_gdf=nodes_gdf,
+    network_structure=network_structure,
+    distances=lu_distances,
+    angular=True,
 )
 
 # %%
