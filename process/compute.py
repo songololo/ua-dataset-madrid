@@ -37,8 +37,10 @@ G_nx = graphs.nx_remove_dangling_nodes(G_nx)
 # city boundary
 bounds = gpd.read_file(path_neighbourhoods)
 bounds_union_geom = bounds.buffer(10).geometry.unary_union
+# decompose for better landuse assignment and more granularity
+G_decomp = graphs.nx_decompose(G_nx, 50)
 # prepare dual
-G_nx_dual = graphs.nx_to_dual(G_nx)
+G_nx_dual = graphs.nx_to_dual(G_decomp)
 
 # %%
 # computations only run for live nodes
@@ -50,9 +52,9 @@ for nd_key, nd_data in tqdm(
     if not bounds_union_geom.contains(point):
         G_nx_dual.nodes[nd_key]["live"] = False
     # attach primal geometry
-    primal_geom = G_nx[nd_data["primal_edge_node_a"]][nd_data["primal_edge_node_b"]][
-        nd_data["primal_edge_idx"]
-    ]["geom"]
+    primal_geom = G_decomp[nd_data["primal_edge_node_a"]][
+        nd_data["primal_edge_node_b"]
+    ][nd_data["primal_edge_idx"]]["geom"]
     G_nx_dual.nodes[nd_key]["primal_geom"] = primal_geom
     # set node weight accord to primal edge lenghts
     G_nx_dual.nodes[nd_key]["weight"] = primal_geom.length
@@ -127,6 +129,12 @@ nodes_gdf = networks.node_centrality_shortest(
 )
 # run simplest path centrality
 nodes_gdf = networks.node_centrality_simplest(
+    network_structure,
+    nodes_gdf,
+    distances=cent_distances,
+)
+# run segment path centrality
+nodes_gdf = networks.segment_centrality(
     network_structure,
     nodes_gdf,
     distances=cent_distances,
