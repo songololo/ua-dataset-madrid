@@ -37,10 +37,9 @@ G_nx = graphs.nx_remove_dangling_nodes(G_nx)
 # city boundary
 bounds = gpd.read_file(path_neighbourhoods)
 bounds_union_geom = bounds.buffer(10).geometry.unary_union
-# decompose for better landuse assignment and more granularity
-G_decomp = graphs.nx_decompose(G_nx, 50)
+# decided not to decompose
 # prepare dual
-G_nx_dual = graphs.nx_to_dual(G_decomp)
+G_nx_dual = graphs.nx_to_dual(G_nx)
 
 # %%
 # computations only run for live nodes
@@ -52,9 +51,9 @@ for nd_key, nd_data in tqdm(
     if not bounds_union_geom.contains(point):
         G_nx_dual.nodes[nd_key]["live"] = False
     # attach primal geometry
-    primal_geom = G_decomp[nd_data["primal_edge_node_a"]][
-        nd_data["primal_edge_node_b"]
-    ][nd_data["primal_edge_idx"]]["geom"]
+    primal_geom = G_nx[nd_data["primal_edge_node_a"]][nd_data["primal_edge_node_b"]][
+        nd_data["primal_edge_idx"]
+    ]["geom"]
     G_nx_dual.nodes[nd_key]["primal_geom"] = primal_geom
     # set node weight accord to primal edge lenghts
     G_nx_dual.nodes[nd_key]["weight"] = primal_geom.length
@@ -189,7 +188,7 @@ premises_eng = premises_eng[
 premises_eng.to_file(path_out_premises)
 
 # %%
-lu_distances = [200, 500, 1000, 2000]
+lu_distances = [100, 200, 500, 1000, 2000]
 # compute mixed uses
 nodes_gdf, premises_eng = layers.compute_mixed_uses(
     premises_eng,
