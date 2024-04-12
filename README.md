@@ -61,6 +61,7 @@ The data sources are pre-processed as described below and saved to the `data` su
   - Download as shapefile
   - Lines split at intersections
   - Duplicate lines removed
+  - Only locations with manual editing are in inner city, particularly Sol where some important connections were missing. Compare `street_network_w_edit.gpkg` to `street_network.gpkg`.
   - Saved as GPKG in EPSG:25830
 - Filtering:
   - Open 20km buffered bounds
