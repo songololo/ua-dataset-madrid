@@ -5,14 +5,13 @@ from __future__ import annotations
 
 import geopandas as gpd
 import numpy as np
+import premises_lu_schema
 from cityseer.metrics import layers, networks
 from cityseer.tools import graphs, io, util
 from rasterio import MemoryFile
 from rasterstats import point_query
-from shapely import geometry
+from shapely import geometry, wkt
 from tqdm import tqdm
-
-import premises_lu_schema
 
 # update the paths to correspond to your file locations if different to below
 path_streets = "../data/street_network_w_edit.gpkg"
@@ -51,16 +50,12 @@ for nd_key, nd_data in tqdm(
     # set live nodes for nodes within boundary
     if not bounds_union_geom.contains(point):
         G_nx_dual.nodes[nd_key]["live"] = False
-    # attach primal geometry
-    primal_geom = G_nx[nd_data["primal_edge_node_a"]][nd_data["primal_edge_node_b"]][
-        nd_data["primal_edge_idx"]
-    ]["geom"]
-    G_nx_dual.nodes[nd_key]["primal_geom"] = primal_geom
     # set node weight accord to primal edge lenghts
-    G_nx_dual.nodes[nd_key]["weight"] = primal_geom.length
+    primal_edge = nd_data["primal_edge"]
+    G_nx_dual.nodes[nd_key]["weight"] = primal_edge.length
     # extract edge bearings for visualisation
     G_nx_dual.nodes[nd_key]["bearing"] = util.measure_bearing(
-        list(primal_geom.coords)[0], list(primal_geom.coords)[-1]
+        list(primal_edge.coords)[0], list(primal_edge.coords)[-1]
     )
 
 # %%
@@ -69,16 +64,30 @@ nodes_gdf, edges_gdf, network_structure = io.network_structure_from_nx(
     G_nx_dual, crs=edges_gdf.crs
 )
 
+
+# %%
+# copy bearing info for primal
+def copy_primal_bearings(row):
+    return G_nx_dual.nodes[row.name]["bearing"]
+
+
+nodes_gdf["bearing"] = nodes_gdf.apply(copy_primal_bearings, axis=1)
+# copy neighbourhood identifiers to nodes
+nodes_centroids = nodes_gdf.geometry.centroid
+nodes_centroids_gdf = gpd.GeoDataFrame(geometry=nodes_centroids, crs=nodes_gdf.crs)
+joined_gdf = gpd.sjoin(nodes_centroids_gdf, bounds, how="left", predicate="intersects")
+nodes_gdf["district"] = joined_gdf["NOMDIS"]
+nodes_gdf["neighb"] = joined_gdf["NOMBRE"]
+
 # %%
 # population data
-# do before dropping point geom
 with open(path_population, "rb") as f:
     memfile = MemoryFile(f.read())
     with memfile.open() as dataset:
         pop_raster = dataset.read()
         for node_idx, node_row in tqdm(nodes_gdf.iterrows(), total=len(nodes_gdf)):
             pop_val = point_query(
-                node_row["geom"],
+                wkt.loads(node_row["dual_node"]),
                 pop_raster,
                 interpolate="nearest",
                 nodata=-200,
@@ -89,35 +98,6 @@ with open(path_population, "rb") as f:
             nodes_gdf.at[node_idx, "pop_dens"] = np.clip(pop_val, 0, np.inf)
 # convert from 100m2 to 1km2
 nodes_gdf["pop_dens"] = nodes_gdf["pop_dens"] * 100
-
-
-# %%
-# splice primal geom onto dual nodes for vis
-def copy_primal_edges(row):
-    return G_nx_dual.nodes[row.name]["primal_geom"]
-
-
-# splice the primal edges onto the dual nodes
-nodes_gdf["line_geometry"] = nodes_gdf.apply(copy_primal_edges, axis=1)
-
-
-# copy bearing info for primal
-def copy_primal_bearings(row):
-    return G_nx_dual.nodes[row.name]["bearing"]
-
-
-nodes_gdf["bearing"] = nodes_gdf.apply(copy_primal_bearings, axis=1)
-# copy neighbourhood identifiers to nodes
-joined_gdf = gpd.sjoin(nodes_gdf, bounds, how="left", predicate="intersects")
-nodes_gdf["district"] = joined_gdf["NOMDIS"]
-nodes_gdf["neighb"] = joined_gdf["NOMBRE"]
-# switch to line geoms
-nodes_gdf.set_geometry("line_geometry", inplace=True)
-nodes_gdf["line_geometry"].set_crs(edges_gdf.crs, inplace=True)
-# geopackages can only handle a single geom column, so demote original geom to WKT
-nodes_gdf["point_geom"] = nodes_gdf["geom"].to_wkt()
-# and drop geom column
-nodes_gdf = nodes_gdf.drop(columns=["geom"])
 
 # %%
 # run shortest path centrality
