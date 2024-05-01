@@ -37,6 +37,8 @@ G_nx = graphs.nx_remove_dangling_nodes(G_nx)
 # city boundary
 bounds = gpd.read_file(path_neighbourhoods)
 bounds_union_geom = bounds.buffer(10).geometry.unary_union
+
+# %%
 # decided not to decompose
 # prepare dual
 G_nx_dual = graphs.nx_to_dual(G_nx)
@@ -246,17 +248,22 @@ nodes_gdf_live.to_file(path_out_dataset)
 
 # %%
 # save subset
-nodes_gdf_subset = nodes_gdf_live[
-    nodes_gdf_live.district.isin(
-        [
-            "Centro",
-            "Arganzuela",
-            "Retiro",
-            "Salamanca",
-            "Chamartín",
-            "Tetuán",
-            "Chamberí",
-        ]
-    )
-]
+bounds_subset_geom = (
+    bounds[
+        bounds["NOMDIS"].isin(
+            [
+                "Centro",
+                "Arganzuela",
+                "Retiro",
+                "Salamanca",
+                "Chamartín",
+                "Tetuán",
+                "Chamberí",
+            ]
+        )
+    ]
+    .buffer(100)
+    .geometry.unary_union
+)
+nodes_gdf_subset = nodes_gdf_live[nodes_gdf_live.intersects(bounds_subset_geom)]
 nodes_gdf_subset.to_file(path_out_dataset_subset)
