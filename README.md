@@ -80,6 +80,8 @@ The data sources are pre-processed as described below and saved to the `data` su
 
 #### Pedestrian Count Data
 
+> No longer used.
+
 - [Download](https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=695cd64d6f9b9610VgnVCM1000001d4a900aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default)
 - [License](https://datos.madrid.es/egob/catalogo/aviso-legal)
 
