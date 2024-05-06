@@ -248,22 +248,17 @@ nodes_gdf_live.to_file(path_out_dataset)
 
 # %%
 # save subset
-bounds_subset_geom = (
-    bounds[
-        bounds["NOMDIS"].isin(
-            [
-                "Centro",
-                "Arganzuela",
-                "Retiro",
-                "Salamanca",
-                "Chamartín",
-                "Tetuán",
-                "Chamberí",
-            ]
-        )
-    ]
-    .buffer(100)
-    .geometry.unary_union
-)
-nodes_gdf_subset = nodes_gdf_live[nodes_gdf_live.intersects(bounds_subset_geom)]
+nodes_gdf_subset = nodes_gdf_live[
+    nodes_gdf_live["district"].isin(
+        [
+            "Centro",
+            "Arganzuela",
+            "Retiro",
+            "Salamanca",
+            "Chamartín",
+            "Tetuán",
+            "Chamberí",
+        ]
+    )
+]
 nodes_gdf_subset.to_file(path_out_dataset_subset)
