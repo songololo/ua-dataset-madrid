@@ -54,7 +54,8 @@ for nd_key, nd_data in tqdm(
         G_nx_dual.nodes[nd_key]["live"] = False
     # set node weight accord to primal edge lenghts
     primal_edge = nd_data["primal_edge"]
-    G_nx_dual.nodes[nd_key]["weight"] = primal_edge.length
+    # not weighting edge lengths so that node count can be used for normalisation
+    # (for centrality paper)
     # extract edge bearings for visualisation
     G_nx_dual.nodes[nd_key]["bearing"] = util.measure_bearing(
         list(primal_edge.coords)[0], list(primal_edge.coords)[-1]
