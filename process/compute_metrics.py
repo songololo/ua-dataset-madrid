@@ -1,4 +1,9 @@
-""" """
+"""
+Extracts:
+- population density
+- network centralities in metric, angular, segment, and length weighted forms
+- landuse access in metric, angular, mixed use form from premises data
+"""
 
 # %%
 from __future__ import annotations
@@ -52,18 +57,29 @@ for nd_key, nd_data in tqdm(
     # set live nodes for nodes within boundary
     if not bounds_union_geom.contains(point):
         G_nx_dual.nodes[nd_key]["live"] = False
-    # set node weight accord to primal edge lenghts
-    primal_edge = nd_data["primal_edge"]
-    # not weighting edge lengths so that node count can be used for normalisation
-    # (for centrality paper)
     # extract edge bearings for visualisation
+    primal_edge = nd_data["primal_edge"]
     G_nx_dual.nodes[nd_key]["bearing"] = util.measure_bearing(
         list(primal_edge.coords)[0], list(primal_edge.coords)[-1]
     )
 
 # %%
-# extract structure
-nodes_gdf, edges_gdf, network_structure = io.network_structure_from_nx(
+# extract unweighted structure
+_nodes_gdf, _edges_gdf, network_structure = io.network_structure_from_nx(
+    G_nx_dual, crs=edges_gdf.crs
+)
+
+# %%
+# create separate network structure with length weighted data
+for nd_key, nd_data in tqdm(
+    G_nx_dual.nodes(data=True), total=G_nx_dual.number_of_nodes()
+):
+    # set node weight accord to primal edge lengths
+    primal_edge = nd_data["primal_edge"]
+    G_nx_dual.nodes[nd_key]["weight"] = primal_edge.length
+
+# extract length weighted structure
+nodes_gdf, edges_gdf, network_structure_len_wt = io.network_structure_from_nx(
     G_nx_dual, crs=edges_gdf.crs
 )
 
@@ -106,6 +122,39 @@ nodes_gdf["pop_dens"] = nodes_gdf["pop_dens"] * 100
 # run shortest path centrality
 cent_distances = [200, 500, 1000, 2000, 5000, 10000]
 nodes_gdf = networks.node_centrality_shortest(
+    network_structure_len_wt,
+    nodes_gdf,
+    distances=cent_distances,
+)
+# run simplest path centrality
+nodes_gdf = networks.node_centrality_simplest(
+    network_structure_len_wt,
+    nodes_gdf,
+    distances=cent_distances,
+)
+
+# %%
+# rename length weighted columns for saving (prevents overwriting)
+for col_extract in [
+    "cc_density",
+    "cc_beta",
+    "cc_farness",
+    "cc_harmonic",
+    "cc_hillier",
+    "cc_betweenness",
+    "cc_betweenness_beta",
+]:
+    new_col_extract = col_extract.replace("cc_", "cc_lw_")
+    nodes_gdf.columns = [
+        col.replace(col_extract, new_col_extract) for col in nodes_gdf.columns
+    ]
+
+
+# %%
+# rerun without length weightings - renamed lw columns won't be overwritten
+# run shortest path centrality
+cent_distances = [200, 500, 1000, 2000, 5000, 10000]
+nodes_gdf = networks.node_centrality_shortest(
     network_structure,
     nodes_gdf,
     distances=cent_distances,
@@ -116,6 +165,8 @@ nodes_gdf = networks.node_centrality_simplest(
     nodes_gdf,
     distances=cent_distances,
 )
+
+# %%
 # run segment path centrality
 nodes_gdf = networks.segment_centrality(
     network_structure,
