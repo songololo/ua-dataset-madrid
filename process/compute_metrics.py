@@ -131,6 +131,8 @@ nodes_gdf = networks.node_centrality_simplest(
     network_structure_len_wt,
     nodes_gdf,
     distances=cent_distances,
+    angular_scaling_unit=180,  # to match Space Syntax convention
+    farness_scaling_offset=0,  # to match Space Syntax convention
 )
 
 # %%
@@ -164,6 +166,8 @@ nodes_gdf = networks.node_centrality_simplest(
     network_structure,
     nodes_gdf,
     distances=cent_distances,
+    angular_scaling_unit=180,  # to match Space Syntax convention
+    farness_scaling_offset=0,  # to match Space Syntax convention
 )
 
 # %%

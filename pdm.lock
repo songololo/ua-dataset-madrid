@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:139658b83b7fe7f28774ce9f934a22b327f382f85d42d832f081ca88603173ab"
+content_hash = "sha256:b26460b33b4ac7be5d5238daf740299547d43c03bde0cc5a904a34ca4b78f49a"
 
 [[package]]
 name = "affine"
@@ -296,11 +296,12 @@ files = [
 
 [[package]]
 name = "cityseer"
-version = "4.15.0b2"
+version = "4.15.1"
 requires_python = "<3.13,>=3.10"
 summary = "Computational tools for network-based pedestrian-scale urban analysis"
 groups = ["default"]
 dependencies = [
+    "fiona>=1.9.6",
     "geopandas>=0.12.2",
     "matplotlib>=3.5.1",
     "networkx>=2.8.8",
@@ -314,33 +315,33 @@ dependencies = [
     "tqdm>=4.63.1",
 ]
 files = [
-    {file = "cityseer-4.15.0b2-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:e43d46e7ead733325b950571cfa1ecccc102c568f6b34edf2dd8685c1a9a5a9b"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:f2a3827b74daa73ccea3f3f86dffd79908c1252655c52d736592e0c126c24c88"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a699ded75b427dc24da144b7ad365da4534c53ceae05c54d4b65beb580627781"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:daa6e06a551febfd6c18c9f526911bfe4122849e666871eb7329bfed96ef8a72"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f72565cb9961e8fb2a1f4b4f8e13db03c3cf5058378f8e590de85e186c3840fb"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:4cf973972ad4f5044db6db2e13b69d87e016a1ed8e297a59c0a6493fe202511f"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:7f048335d129b5e04a39a11bc0e1f313656a769af06c0d291eeb4bf25bb4e7e4"},
-    {file = "cityseer-4.15.0b2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9480847765a3d2b21250536664fc03bcfc330b360ca1fe30ab86e788e78d1021"},
-    {file = "cityseer-4.15.0b2-cp311-none-win32.whl", hash = "sha256:60b42fb0e70ab5868496005b4580accd2ec80fb0e2fce4be67181797b72e5c24"},
-    {file = "cityseer-4.15.0b2-cp311-none-win_amd64.whl", hash = "sha256:da03aa9f751af46bb18ef59d39bf06ffedfce9f109127fcd18506c47b3a03bdf"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:158223590a16fd258b4ab5510990dfa6f38fe66f7d66b3d12ee7e6e13e8c82b3"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:9f946c09b7a28e92778a18678bad84e1be4deb6538480a8ac83165ec97ff0126"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:dfd87999f6f649e43c978a25b110aec4b4278b7c9c54b347e73a6c6647ffe6fa"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:1acabd892af39598be98a10544e120d2ebd81e7c5c9572d46d120c6fff4178a4"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ec5f990e50c25f8330c12a7158d1fa0b2e4519dae86c7ee08f1b0fcd0092d6ac"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:b8a5addee9946d323fc41fb83ca037b531d86f69dfef85c9290f7f424b9666b3"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:a33f81d8df8aaba4580d3821c2d460a65e42dadff9f779359c141384e1d13676"},
-    {file = "cityseer-4.15.0b2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:92dd4de0fe97503fe23cff3a6fc3617bdaf0db154f778426a41ed83eef559824"},
-    {file = "cityseer-4.15.0b2-cp312-none-win32.whl", hash = "sha256:d7d8819fdc950c0af956ec46e98b42dd0eabc88f549b54258a390ddc8826b074"},
-    {file = "cityseer-4.15.0b2-cp312-none-win_amd64.whl", hash = "sha256:baab87e996d28502f507613a5714214e09f38ba15bb99d74b9431670aaac862c"},
-    {file = "cityseer-4.15.0b2-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2a23a39d0eb0310c6622c2cf7a6f3bbcafab9bf8a3d82a5e748bcd81d6c9fc84"},
-    {file = "cityseer-4.15.0b2-pp310-pypy310_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:c3f0d779cfe368e9a72e94b8d679a2fc7152f2eec8cea50329cc6f08123a03bb"},
-    {file = "cityseer-4.15.0b2-pp310-pypy310_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:9668ad43664ad3c20b0564f294db940ac9cedd8deaff9ac676bee82e7f70f0e8"},
-    {file = "cityseer-4.15.0b2-pp310-pypy310_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:398b36fa1566435b91c27cb07e01ed788b4ff802410d7a54fa833be085a9aed1"},
-    {file = "cityseer-4.15.0b2-pp310-pypy310_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:aa6cadea1d64042e9f2df6da5839aa06c6c9d3084954046a5e5284cc21615c1c"},
-    {file = "cityseer-4.15.0b2-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2abf20955ba31319ec490fbdeb85196c36b34087277fa7559b0b573f3abe4df2"},
-    {file = "cityseer-4.15.0b2.tar.gz", hash = "sha256:c24d8112bf105fc17a029d5a962dd8fabd42331c1e767418afc219fce6fc4f5f"},
+    {file = "cityseer-4.15.1-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:f017cdc663ffb4fc35980c61cfd2dd1e13e4a3769f6f0d05545454154736ce48"},
+    {file = "cityseer-4.15.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:13ad67996f7662b8c34b90217ea536bb2c91e5e985c6eb6af735d8d7b61b304f"},
+    {file = "cityseer-4.15.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a0d2eaa1af4575e34a5c8ec3b7530e5d93b390ff1c04edd9910bfd4cd165d03f"},
+    {file = "cityseer-4.15.1-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:d5d99216521e1c64c25bcc9c8e913ac862ffa37833b2607cbc36102f81e22ec6"},
+    {file = "cityseer-4.15.1-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:32f3b5ab7a654a02a7cb89bad1dfc3999b249cf5e006a60a61f31df7f0c0003c"},
+    {file = "cityseer-4.15.1-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:fff07259f53e11a34ae1313bb2aa2e70034fdb94532a4b3d090e6a90e7e0eeea"},
+    {file = "cityseer-4.15.1-cp311-cp311-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:14ba2f65f7db0aa4496a2ee141203a6efb3baeb673bbaf6957566acf8c8fee67"},
+    {file = "cityseer-4.15.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e2728cf8d35474b803a52e1b040a91e706a33029593817cbc8bac4aa5d84ba04"},
+    {file = "cityseer-4.15.1-cp311-none-win32.whl", hash = "sha256:4fa431dc30b832885259fe1ba430ad963a9b39171870f4d943372039e954d1e4"},
+    {file = "cityseer-4.15.1-cp311-none-win_amd64.whl", hash = "sha256:0d5c2d36ceeae22c6236e094a0a9b855fd1037518bcbced54c84b7398cec05b1"},
+    {file = "cityseer-4.15.1-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:566bf54484fec2d7d4cce51ee282df2d7e5f4d524ea218e5b0295c74431c1bad"},
+    {file = "cityseer-4.15.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:d894c44f385fde6ceabafd47fea5c48e631f5c3db1102c0b7f72eaf0ed55c30d"},
+    {file = "cityseer-4.15.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ad458f9683e204b170fc43c6ac8cbe2282a90e1d3a46017d3a4a807735f4bfeb"},
+    {file = "cityseer-4.15.1-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:2745785d0b4ebb9acde15f7086441bf97c930d1115fbbe5e56b815099330a361"},
+    {file = "cityseer-4.15.1-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8665ef9864393da2286bcbaaacdaf4b756e967513310a388c90083438d69b7a1"},
+    {file = "cityseer-4.15.1-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:5945ed9870a1a6c1e67ac88ae3d00f842e75be9395c9e884b27156af8709713c"},
+    {file = "cityseer-4.15.1-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:cb712c762eb8ee48e013462ce66a0ea93bd80233be067d8c8c058f4acfcc9db0"},
+    {file = "cityseer-4.15.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9b7af9331ae6a5b99580fe71ee7686222de38a9d4433f806104b5f711d978a3d"},
+    {file = "cityseer-4.15.1-cp312-none-win32.whl", hash = "sha256:026c708d466cac9192348510c0d05496fc0c0ff956966c4e2326a0a56311b1f2"},
+    {file = "cityseer-4.15.1-cp312-none-win_amd64.whl", hash = "sha256:7b7af77b992563ba2d059ac569c2a31f01a0df47fd33378409d9972faaa5ed6f"},
+    {file = "cityseer-4.15.1-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:da4a61127e6ab9d9060d48158caa7e8d9499a455c182c0cd53c07b9c4872391f"},
+    {file = "cityseer-4.15.1-pp310-pypy310_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:2c1cecba832e1f9606caf384982a52c7e82a5623fe786d3199fa64983bf0ebc7"},
+    {file = "cityseer-4.15.1-pp310-pypy310_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:3537a87faf5960871ee0e26ee0f09f2e6ad61faa1c14b700c2da40a6c9726673"},
+    {file = "cityseer-4.15.1-pp310-pypy310_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:3cb0f3fc248cb2cad2752bfc44985dcbadf8d5ee1757d056e8c87145369eebc7"},
+    {file = "cityseer-4.15.1-pp310-pypy310_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:5b8a0ac1d17b73353ddf2a2c5e08611008e9ba23e24d2cc14a9b7de3fc9e5133"},
+    {file = "cityseer-4.15.1-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4d3bdd3701ceb905d419dcd22d09f50e89201d3b42fe7efffad257dba0bffb65"},
+    {file = "cityseer-4.15.1.tar.gz", hash = "sha256:85fb270064f87225c17b939d3c5dfe2d5feb44d6a0d031a9a8febc8b5f1bae1e"},
 ]
 
 [[package]]
