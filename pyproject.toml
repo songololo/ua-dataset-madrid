@@ -1,6 +1,6 @@
 [project]
-name = "paper-centrality-normalisation"
-version = "0.2.0"
+name = "madrid-ua-dataset"
+version = "0.3.0"
 description = "Default template for PDM package"
 authors = [
     {name = "", email = ""},
@@ -13,7 +13,7 @@ dependencies = [
     "jupyterlab>=4.0.10",
     "matplotlib>=3.8.3",
     "jupyter>=1.0.0",
-    "cityseer>=4.15.1",
+    "cityseer>=4.15.2",
     "scipy>=1.12.0",
     "networkx>=3.2.1",
     "rasterstats>=0.19.0",

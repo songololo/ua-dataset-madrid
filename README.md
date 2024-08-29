@@ -6,15 +6,15 @@ Madrid Dataset and downstream urban analytics dataset based on Madrid open data.
 
 Clone this repository to a local working folder.
 
-The PDM package manager is recommended and can be installed on mac per `brew install pdm`.
+The PDM package manager is recommended and can be installed on mac per `brew install pdm` else via `pip` per `pip install pdm`.
 
-Packages can then be installed into a virtual environment per `pdm install`.
+Packages can then be installed into a virtual environment per `pdm install` from the repo's root.
 
-If using an IDE the `.venv` should be detected automatically by IDEs such as vscode.
+If using an IDE the `.venv` should be detected automatically by IDEs such as vscode, else activate it manually.
 
 Create a `temp` folder inside the repository's root folder. This folder is ignored by `.gitignore` but is necessary for the script to output files from the processing steps.
 
-The code is in `process/compute.py` file and can be run using code cells demarcated by the `# %%` lines (assuming an IDE such as vscode).
+The code is in `process/compute.py` file and can be run using code cells demarcated by the `# %%` lines (assuming an IDE such as vscode). Else these can be copied and pasted into a Python Notebook.
 
 The file can otherwise be run directly, though the file paths to the `data` folder may need to be adjusted (e.g. changing `../` to `./`).
 
