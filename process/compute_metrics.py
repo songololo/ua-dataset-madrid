@@ -50,9 +50,7 @@ G_nx_dual = graphs.nx_to_dual(G_nx)
 
 # %%
 # computations only run for live nodes
-for nd_key, nd_data in tqdm(
-    G_nx_dual.nodes(data=True), total=G_nx_dual.number_of_nodes()
-):
+for nd_key, nd_data in tqdm(G_nx_dual.nodes(data=True), total=G_nx_dual.number_of_nodes()):
     point = geometry.Point(nd_data["x"], nd_data["y"])
     # set live nodes for nodes within boundary
     if not bounds_union_geom.contains(point):
@@ -71,9 +69,7 @@ _nodes_gdf, _edges_gdf, network_structure = io.network_structure_from_nx(
 
 # %%
 # create separate network structure with length weighted data
-for nd_key, nd_data in tqdm(
-    G_nx_dual.nodes(data=True), total=G_nx_dual.number_of_nodes()
-):
+for nd_key, nd_data in tqdm(G_nx_dual.nodes(data=True), total=G_nx_dual.number_of_nodes()):
     # set node weight accord to primal edge lengths
     primal_edge = nd_data["primal_edge"]
     G_nx_dual.nodes[nd_key]["weight"] = primal_edge.length
@@ -147,9 +143,7 @@ for col_extract in [
     "cc_betweenness_beta",
 ]:
     new_col_extract = col_extract.replace("cc_", "cc_lw_")
-    nodes_gdf.columns = [
-        col.replace(col_extract, new_col_extract) for col in nodes_gdf.columns
-    ]
+    nodes_gdf.columns = [col.replace(col_extract, new_col_extract) for col in nodes_gdf.columns]
 
 
 # %%
@@ -214,13 +208,9 @@ premises_eng["division_desc"] = premises_eng["division_desc"].replace(
     premises_lu_schema.division_schema
 )
 # remove none / null
+premises_eng = premises_eng[~premises_eng["section_desc"].str.contains("none|null", na=False)]
 premises_eng = premises_eng[
-    ~premises_eng["section_desc"].str.contains("none|null", na=False)
-]
-premises_eng = premises_eng[
-    ~premises_eng["division_desc"].str.contains(
-        "Null Value at Origin|No Activity", na=False
-    )
+    ~premises_eng["division_desc"].str.contains("Null Value at Origin|No Activity", na=False)
 ]
 # %%
 # save cleaned version
