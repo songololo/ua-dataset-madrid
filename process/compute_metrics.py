@@ -20,13 +20,13 @@ from tqdm import tqdm
 from process import premises_lu_schema
 
 # update the paths to correspond to your file locations if different to below
-path_streets = "data/street_network_w_edit.gpkg"
-path_neighbourhoods = "data/neighbourhoods.gpkg"
-path_out_dataset = "temp/dataset.gpkg"
-path_out_dataset_subset = "temp/dataset_subset.gpkg"
-path_premises = "data/premises_activities.gpkg"
-path_out_premises = "temp/premises_clean.gpkg"
-path_population = "data/population_clipped.tif"
+path_streets = "../data/street_network_w_edit.gpkg"
+path_neighbourhoods = "../data/neighbourhoods.gpkg"
+path_out_dataset = "../temp/dataset.gpkg"
+path_out_dataset_subset = "../temp/dataset_subset.gpkg"
+path_premises = "../data/premises_activities.gpkg"
+path_out_premises = "../data/premises_clean.gpkg"
+path_population = "../data/population_clipped.tif"
 
 # %%
 # open streets
