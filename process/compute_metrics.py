@@ -20,13 +20,13 @@ from tqdm import tqdm
 from process import premises_lu_schema
 
 # update the paths to correspond to your file locations if different to below
-path_streets = "../data/street_network_w_edit.gpkg"
-path_neighbourhoods = "../data/neighbourhoods.gpkg"
-path_out_dataset = "../temp/dataset.gpkg"
-path_out_dataset_subset = "../temp/dataset_subset.gpkg"
-path_premises = "../data/premises_activities.gpkg"
-path_out_premises = "../data/premises_clean.gpkg"
-path_population = "../data/population_clipped.tif"
+path_streets = "./data/street_network_w_edit.gpkg"
+path_neighbourhoods = "./data/neighbourhoods.gpkg"
+path_out_dataset = "./temp/dataset.gpkg"
+path_out_dataset_subset = "./temp/dataset_subset.gpkg"
+path_premises = "./data/premises_activities.gpkg"
+path_out_premises = "./data/premises_clean.gpkg"
+path_population = "./data/population_clipped.tif"
 
 # %%
 # open streets
@@ -185,16 +185,16 @@ premises_eng = premises.rename(
         "id_distrito_local": "local_distr_id",
         "desc_distrito_local": "local_distr_desc",
         "id_barrio_local": "local_neighb_id",
-        "desc_barrio_local": "local_neighb_desc ",
+        "desc_barrio_local": "local_neighb_desc",
         "cod_barrio_local": "local_neighb_code",
         "id_seccion_censal_local": "local_census_section_id",
-        "desc_seccion_censal_local": "local_census_section_desc ",
+        "desc_seccion_censal_local": "local_census_section_desc",
         "id_seccion": "section_id",
         "desc_seccion": "section_desc",
         "id_division": "division_id",
         "desc_division": "division_desc",
         "id_epigrafe": "epigraph_id",
-        "desc_epigrafe": "epigraph_desc ",
+        "desc_epigrafe": "epigraph_desc",
         "geometry": "geometry",
     }
 )

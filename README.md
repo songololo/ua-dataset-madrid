@@ -18,7 +18,7 @@ The PDM package manager can be installed on mac per `brew install pdm`. Packages
 
 ### IDE and venv
 
-If using an IDE the `.venv` should be detected automatically by IDEs such as vscode, else activate it manually.
+The virtual environment should be detected automatically by IDEs such as vscode, else activate it manually.
 
 ### Setup
 
