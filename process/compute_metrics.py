@@ -1,3 +1,4 @@
+# %%
 """
 Extracts:
 - population density
@@ -5,7 +6,6 @@ Extracts:
 - landuse access in metric, angular, mixed use form from premises data
 """
 
-# %%
 from __future__ import annotations
 
 import geopandas as gpd
@@ -20,17 +20,21 @@ from tqdm import tqdm
 from process import premises_lu_schema
 
 # update the paths to correspond to your file locations if different to below
-path_streets = "./data/street_network_w_edit.gpkg"
-path_neighbourhoods = "./data/neighbourhoods.gpkg"
-path_out_dataset = "./temp/dataset.gpkg"
-path_out_dataset_subset = "./temp/dataset_subset.gpkg"
-path_premises = "./data/premises_activities.gpkg"
-path_out_premises = "./data/premises_clean.gpkg"
-path_population = "./data/population_clipped.tif"
+# create a temp folder if not existing before running
+PATH_STREETS = "./data/street_network_w_edit.gpkg"
+PATH_NEIGHBOURHOODS = "./data/neighbourhoods.gpkg"
+PATH_OUT_DATASET = "./temp/dataset.gpkg"
+PATH_OUT_DATASET_SUBSET = "./temp/dataset_subset.gpkg"
+PATH_PREMISES = "./data/premises_activities.gpkg"
+PATH_OUT_PREMISES = "./data/premises_clean.gpkg"
+PATH_POPULATION = "./data/population_clipped.tif"
+
+CENT_DISTANCES = [200, 500, 1000, 2000, 5000, 10000]
+LU_DISTANCES = [100, 200, 500, 1000, 2000]
 
 # %%
 # open streets
-edges_gdf = gpd.read_file(path_streets)
+edges_gdf = gpd.read_file(PATH_STREETS)
 # convert multipart geoms to single
 edges_gdf_singles = edges_gdf.explode(drop=True)
 # generate networkx
@@ -41,7 +45,7 @@ G_nx = graphs.nx_remove_dangling_nodes(G_nx)
 
 # %%
 # city boundary
-bounds = gpd.read_file(path_neighbourhoods)
+bounds = gpd.read_file(PATH_NEIGHBOURHOODS)
 bounds_union_geom = bounds.buffer(10).geometry.unary_union
 
 # %%
@@ -65,7 +69,7 @@ for nd_key, nd_data in tqdm(G_nx_dual.nodes(data=True), total=G_nx_dual.number_o
 # %%
 # extract unweighted structure
 _nodes_gdf, _edges_gdf, network_structure = io.network_structure_from_nx(
-    G_nx_dual, crs=edges_gdf.crs
+    G_nx_dual,
 )
 
 # %%
@@ -77,7 +81,7 @@ for nd_key, nd_data in tqdm(G_nx_dual.nodes(data=True), total=G_nx_dual.number_o
 
 # extract length weighted structure
 nodes_gdf, edges_gdf, network_structure_len_wt = io.network_structure_from_nx(
-    G_nx_dual, crs=edges_gdf.crs
+    G_nx_dual,
 )
 
 
@@ -97,7 +101,7 @@ nodes_gdf["neighb"] = joined_gdf["NOMBRE"]
 
 # %%
 # population data
-with open(path_population, "rb") as f:
+with open(PATH_POPULATION, "rb") as f:
     memfile = MemoryFile(f.read())
     with memfile.open() as dataset:
         pop_raster = dataset.read()
@@ -117,17 +121,16 @@ nodes_gdf["pop_dens"] = nodes_gdf["pop_dens"] * 100
 
 # %%
 # run shortest path centrality
-cent_distances = [200, 500, 1000, 2000, 5000, 10000]
 nodes_gdf = networks.node_centrality_shortest(
     network_structure_len_wt,
     nodes_gdf,
-    distances=cent_distances,
+    distances=CENT_DISTANCES,
 )
 # run simplest path centrality
 nodes_gdf = networks.node_centrality_simplest(
     network_structure_len_wt,
     nodes_gdf,
-    distances=cent_distances,
+    distances=CENT_DISTANCES,
     angular_scaling_unit=90,  # to match Space Syntax convention of 0 - 180 = 0 - 2
     farness_scaling_offset=0,  # to match Space Syntax convention of 0 - 180 = 0 - 2
 )
@@ -150,17 +153,16 @@ for col_extract in [
 # %%
 # rerun without length weightings - renamed lw columns won't be overwritten
 # run shortest path centrality
-cent_distances = [200, 500, 1000, 2000, 5000, 10000]
 nodes_gdf = networks.node_centrality_shortest(
     network_structure,
     nodes_gdf,
-    distances=cent_distances,
+    distances=CENT_DISTANCES,
 )
 # run simplest path centrality
 nodes_gdf = networks.node_centrality_simplest(
     network_structure,
     nodes_gdf,
-    distances=cent_distances,
+    distances=CENT_DISTANCES,
     angular_scaling_unit=90,  # to match Space Syntax convention of 0 - 180 = 0 - 2
     farness_scaling_offset=0,  # to match Space Syntax convention of 0 - 180 = 0 - 2
 )
@@ -170,12 +172,12 @@ nodes_gdf = networks.node_centrality_simplest(
 nodes_gdf = networks.segment_centrality(
     network_structure,
     nodes_gdf,
-    distances=cent_distances,
+    distances=CENT_DISTANCES,
 )
 
 # %%
 # load premises
-premises = gpd.read_file(path_premises)
+premises = gpd.read_file(PATH_PREMISES)
 
 # %%
 # rename columns to english
@@ -215,17 +217,16 @@ premises_eng = premises_eng[
 ]
 # %%
 # save cleaned version
-premises_eng.to_file(path_out_premises)
+premises_eng.to_file(PATH_OUT_PREMISES)
 
 # %%
-lu_distances = [100, 200, 500, 1000, 2000]
 # compute mixed uses
 nodes_gdf, premises_eng = layers.compute_mixed_uses(
     premises_eng,
     landuse_column_label="division_desc",
     nodes_gdf=nodes_gdf,
     network_structure=network_structure,
-    distances=lu_distances,
+    distances=LU_DISTANCES,
     compute_hill=False,
     compute_hill_weighted=True,
 )
@@ -235,7 +236,7 @@ nodes_gdf, premises_eng = layers.compute_mixed_uses(
     landuse_column_label="division_desc",
     nodes_gdf=nodes_gdf,
     network_structure=network_structure,
-    distances=lu_distances,
+    distances=LU_DISTANCES,
     compute_hill=False,
     compute_hill_weighted=True,
     angular=True,
@@ -256,7 +257,7 @@ nodes_gdf, premises_eng = layers.compute_accessibilities(
     ],
     nodes_gdf=nodes_gdf,
     network_structure=network_structure,
-    distances=lu_distances,
+    distances=LU_DISTANCES,
 )
 # compute accessibility using simplest paths
 nodes_gdf, premises_eng = layers.compute_accessibilities(
@@ -274,7 +275,7 @@ nodes_gdf, premises_eng = layers.compute_accessibilities(
     ],
     nodes_gdf=nodes_gdf,
     network_structure=network_structure,
-    distances=lu_distances,
+    distances=LU_DISTANCES,
     angular=True,
 )
 
@@ -291,7 +292,7 @@ for col in nodes_gdf_live.select_dtypes(include=["int64"]).columns:
 for col in nodes_gdf_live.select_dtypes(include=["float64"]).columns:
     nodes_gdf_live[col] = nodes_gdf_live[col].astype("float32")
 # save
-nodes_gdf_live.to_file(path_out_dataset)
+nodes_gdf_live.to_file(PATH_OUT_DATASET)
 
 # %%
 # save subset
@@ -308,4 +309,4 @@ nodes_gdf_subset = nodes_gdf_live[
         ]
     )
 ]
-nodes_gdf_subset.to_file(path_out_dataset_subset)
+nodes_gdf_subset.to_file(PATH_OUT_DATASET_SUBSET)
