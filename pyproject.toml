@@ -1,6 +1,6 @@
 [project]
 name = "ua-dataset-madrid"
-version = "0.8.0"
+version = "1.0.0"
 description = "Default template for PDM package"
 authors = [{ name = "", email = "" }]
 dependencies = [
