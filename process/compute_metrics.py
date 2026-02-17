@@ -21,7 +21,7 @@ from process import premises_lu_schema
 
 # update the paths to correspond to your file locations if different to below
 # create a temp folder if not existing before running
-PATH_STREETS = "./data/street_network_w_edit.gpkg"
+PATH_STREETS = "./data/street_network.gpkg"
 PATH_NEIGHBOURHOODS = "./data/neighbourhoods.gpkg"
 PATH_OUT_DATASET = "./temp/dataset.gpkg"
 PATH_OUT_DATASET_SUBSET = "./temp/dataset_subset.gpkg"

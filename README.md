@@ -61,30 +61,21 @@ The data sources are pre-processed as described below and saved to the `data` su
   - Delete attribute columns
   - Export to GPKG
 
-#### Street Network
+#### Street Network (Red Viaria)
 
 - Source:
-  - [Download](https://datos.comunidad.madrid/catalogo/dataset/spacm_callescm)
-  - [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/legalcode.es)
-  - Description: _Set of roads officially approved by the municipalities of the Community of Madrid, ordered by different characteristics._
-  - NOTE:
-    - Original dataset link since removed: https://datos.comunidad.madrid/catalogo/dataset/spacm_callescm
-    - Possible replacements from:
-      - https://data.europa.eu/data/datasets/https-idem-madrid-org-catalogocartografia-srv-resources-datasets-spacm_callescm?locale=en
-      - https://gestiona.comunidad.madrid/iestadis/fijas/estructu/general/territorio/estructu_descargas.htm
-      - https://gestiona.comunidad.madrid/nomecalles_web/#/inicio via Download Calejero..
+  - [Download](https://centrodedescargas.cnig.es/CentroDescargas/index.jsp) (CNIG/IGN - Redes de Transporte - Madrid province)
+  - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.es) ([ign.es](https://www.ign.es))
+  - Cite: Attribute IGN (Instituto Geográfico Nacional de España).
+  - Description: _Road network (Red Viaria) for Madrid province from the CNIG/IGN Redes de Transporte dataset. Layer `rt_tramo_vial` containing road segments with classification, surface, lane, and naming attributes._
 - Street Network Pre-processing:
-  - Download as shapefile
-  - Lines split at intersections
-  - Duplicate lines removed
-  - Manual editing review for inner city, particularly Sol where some important connections were missing.
-  - Manually welded bridges and overpasses for motorways etc. after splitting step.
-  - Compare `street_network_w_edit.gpkg` to `street_network.gpkg`.
-  - Saved as GPKG in EPSG:25830
-- Filtering:
-  - Open 20km buffered bounds
-  - Select and delete roads outside buffer
-  - Save
+  - Download `RT_MADRID_gpkg.zip` from CNIG Centro de Descargas
+  - Extract `red_viaria.gpkg`, layer `rt_tramo_vial`
+  - Reproject from EPSG:4258 to EPSG:25830
+  - Clip to 20km buffered bounds
+  - Retain `clased` (road class) and `nombre` (road name) attributes only
+  - Set coordinate grid precision to 1m and simplify geometries to 1m tolerance
+  - Save as GPKG
   - Vacuum
 
 #### Population Data

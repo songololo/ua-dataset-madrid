@@ -1,10 +1,10 @@
 [project]
 name = "ua-dataset-madrid"
-version = "1.0.0"
+version = "2.0.0"
 description = "Default template for PDM package"
 authors = [{ name = "", email = "" }]
 dependencies = [
-    "cityseer>=4.22.3",
+    "cityseer>=4.23.0b9",
     "geopandas>=1.0.1",
     "ipykernel>=6.29.5",
     "jupyter>=1.1.1",
@@ -22,8 +22,8 @@ requires-python = ">=3.11,<3.14"
 readme = "README.md"
 license = { text = "AGPL-3.0" }
 
-[tool.uv]
-dev-dependencies = ["ruff>=0.6.5", "ty>=0.0.5"]
+[dependency-groups]
+dev = ["ruff>=0.6.5", "ty>=0.0.5"]
 
 [tool.ruff]
 line-length = 100
